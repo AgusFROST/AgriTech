@@ -27,15 +27,6 @@
                         map.addControl(new maplibregl.NavigationControl());
                     </script>
 
-                    <!-- Button for Layer and Zoom Controls -->
-                    <div class="d-flex mt-3">
-                        <button class="btn btn-custom mr-2">
-                            <i class="fas fa-layer-group"></i> Layer
-                        </button>
-                        <button class="btn btn-custom">
-                            <i class="fas fa-search"></i> Zoom
-                        </button>
-                    </div>
                 </div>
 
             </div>

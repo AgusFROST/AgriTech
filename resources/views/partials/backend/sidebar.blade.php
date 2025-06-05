@@ -25,13 +25,6 @@
                         Lahan
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link d-flex align-items-center gap-2 {{ request()->is('dashboard/cuaca') ? 'active' : '' }}"
-                        href="/dashboard/cuaca">
-                        <i class="fas fa-cloud-sun"></i>
-                        Cuaca
-                    </a>
-                </li>
             </ul>
 
 
@@ -64,6 +57,15 @@
                             NDVI Map Analysis
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center gap-2 {{ request()->is('dashboard/ndvi-update') ? 'active' : '' }}"
+                            href="/dashboard/ndvi-update">
+                            <svg class="bi">
+                                <use xlink:href="#file-earmark-text" />
+                            </svg>
+                            NDVI Update
+                        </a>
+                    </li>
                 </ul>
             @endif
 
@@ -71,7 +73,8 @@
 
             <ul class="nav flex-column mb-auto">
                 <li class="nav-item">
-                    <a class="nav-link d-flex align-items-center gap-2" href="#">
+                    <a class="nav-link d-flex align-items-center gap-2 {{ request()->is('dashboard/settings') ? 'active' : '' }}"
+                        href="/dashboard/settings">
                         <svg class="bi">
                             <use xlink:href="#gear-wide-connected" />
                         </svg>

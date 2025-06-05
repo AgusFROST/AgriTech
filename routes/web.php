@@ -40,6 +40,10 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/dashboard/ndvi-map', [DashboardController::class, 'ndvimap']);
 
+    Route::get('/dashboard/ndvi-data', [DashboardController::class, 'getNdviData'])->name('dashboard.ndvi.data');
+
+    Route::get('/dashboard/settings', [DashboardController::class, 'editProfile'])->name('dashboard.settings');
+    Route::post('/dashboard/settings', [DashboardController::class, 'updateProfile'])->name('dashboard.settings.update');
 
 });
 
@@ -47,6 +51,12 @@ Route::middleware(['auth'])->group(function () {
 
 Route::prefix('dashboard')->middleware(['auth', 'role:Administrator'])->group(function () {
     Route::resource('users-management', UserController::class);
+
+    Route::get('/ndvi-update', [DashboardController::class, 'showNdvi'])->name('dashboard.ndvi.show');
+    Route::post('/ndvi-update', [DashboardController::class, 'updateNdvi'])->name('dashboard.ndvi.update');
+
+    Route::post('/ndvi-upload', [DashboardController::class, 'updateNdviCsv'])->name('dashboard.ndvi.upload');
+
 });
 
 

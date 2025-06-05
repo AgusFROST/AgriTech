@@ -1,0 +1,63 @@
+// Google Earth Engine script
+// Koordinat kamu
+var point = ee.Geometry.Point(108.8284617927, -7.2942982817);
+var area = point.buffer(3000); // buffer 3 km, bisa diubah sesuai area yang diinginkan
+
+// Fungsi untuk menghitung NDVI
+function calculateNDVI(image) {
+  var ndvi = image.normalizedDifference(['B8', 'B4']).rename('NDVI');
+  return ndvi;
+}
+
+// Ambil data bulanan selama 12 bulan terakhir
+var startDate = ee.Date('2024-01-01');
+var endDate = ee.Date('2025-01-31');
+var months = ee.List.sequence(0, 11); // 12 bulan
+
+var monthlyNDVI = ee.ImageCollection.fromImages(
+  months.map(function(month) {
+    var start = startDate.advance(month, 'month');
+    var end = start.advance(1, 'month');
+
+    var image = ee.ImageCollection("COPERNICUS/S2_SR")
+      .filterBounds(area)
+      .filterDate(start, end)
+      .sort('CLOUDY_PIXEL_PERCENTAGE')
+      .first();
+
+    return calculateNDVI(image)
+      .set('system:time_start', start.millis())
+      .set('month', start.format('YYYY-MM'));
+  })
+);
+
+// Hitung statistik untuk setiap bulan
+var monthlyStats = monthlyNDVI.map(function(image) {
+  var stats = image.reduceRegion({
+    reducer: ee.Reducer.mean(),
+    geometry: area,
+    scale: 10
+  });
+  return ee.Feature(null, {
+    'date': image.get('month'),
+    'mean_ndvi': stats.get('NDVI'),
+    'system:time_start': image.get('system:time_start')
+  });
+});
+
+// Ekspor data time series
+Export.table.toDrive({
+  collection: monthlyStats,
+  description: 'NDVI_TimeSeries',
+  fileFormat: 'CSV'
+});
+
+// Visualisasi data terbaru
+var latestImage = ee.Image(monthlyNDVI.toList(1).get(0));
+var ndviParams = {min: 0, max: 1, palette: ['red', 'yellow', 'green']};
+Map.centerObject(point, 12);
+Map.addLayer(latestImage.clip(area), ndviParams, 'Latest NDVI');
+
+// Buat URL Tile NDVI
+var mapId = latestImage.clip(area).getMap(ndviParams);
+print('Tile URL (Leaflet):', mapId.urlFormat);

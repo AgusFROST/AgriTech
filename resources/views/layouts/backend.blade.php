@@ -142,12 +142,19 @@
         <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
             integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
+
+        <!-- Plugin leaflet-easyPrint -->
+        <script src="https://cdn.jsdelivr.net/npm/leaflet-easyprint@2.1.9/dist/bundle.min.js"></script>
+
+
         <style>
             #ndvi-map {
                 height: 500px;
                 width: 100%;
             }
         </style>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     @endif
 </head>
 
@@ -184,8 +191,10 @@
                     <h1 class="h2">@yield('title')</h1>
                     @if (Request::is('dashboard/ndvi-map'))
                         <div>
-                            <button class="btn btn-outline-secondary me-2"><i class="fas fa-file-export"></i>
+                            <button class="btn btn-outline-secondary me-2" id="export-map"><i
+                                    class="fas fa-file-export"></i>
                                 Export</button>
+
                             <button class="btn btn-primary" onclick="location.reload();">
                                 <i class="fas fa-sync-alt"></i> Update
                             </button>

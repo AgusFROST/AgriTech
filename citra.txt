@@ -1,0 +1,31 @@
+// Koordinat kamu
+var point = ee.Geometry.Point(108.8284617927, -7.2942982817);
+var area = point.buffer(3000); // buffer 3 km, bisa diubah sesuai area yang diinginkan
+
+// Ambil citra Sentinel-2 pada Januari 2025
+var image = ee.ImageCollection("COPERNICUS/S2_SR")
+  .filterBounds(area)
+  .filterDate('2025-01-01', '2025-01-31')
+  .sort('CLOUDY_PIXEL_PERCENTAGE')
+  .first();
+
+// Hitung NDVI (NIR - Red) / (NIR + Red)
+var ndvi = image.normalizedDifference(['B8', 'B4']).rename('NDVI');
+
+// Visualisasi NDVI
+var ndviParams = {min: 0, max: 1, palette: ['red', 'yellow', 'green']};
+Map.centerObject(point, 12);
+Map.addLayer(ndvi.clip(area), ndviParams, 'NDVI');
+
+// Buat URL Tile NDVI
+var mapId = ndvi.clip(area).getMap(ndviParams);
+print('Tile URL (Leaflet):', mapId.urlFormat);
+
+// Export NDVI sebagai gambar PNG
+Export.image.toDrive({
+  image: ndvi.clip(area),
+  description: 'NDVI_Export',
+  scale: 10,
+  region: area,
+  fileFormat: 'GeoTIFF',
+});

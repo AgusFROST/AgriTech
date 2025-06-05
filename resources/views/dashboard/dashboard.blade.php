@@ -11,7 +11,7 @@
                         <h5 class="card-title">Total Lahan</h5>
                         <i class="fas fa-chart-area"></i>
                     </div>
-                    <h2 class="card-text">250 Ha</h2>
+                    <h2 class="card-text">{{ $totalLahan }} Ha</h2>
                     <p class="card-text text-muted">+5% dari bulan lalu</p>
                 </div>
             </div>
@@ -23,7 +23,7 @@
                         <h5 class="card-title">Prediksi Panen</h5>
                         <i class="fas fa-seedling"></i>
                     </div>
-                    <h2 class="card-text">750 Ton</h2>
+                    <h2 class="card-text">{{ $prediksiPanen }} Ton</h2>
                     <p class="card-text text-muted">Estimasi Maret 2025</p>
                 </div>
             </div>
@@ -35,8 +35,13 @@
                         <h5 class="card-title">Kesehatan Tanaman</h5>
                         <i class="fas fa-heart"></i>
                     </div>
-                    <h2 class="card-text">92%</h2>
-                    <p class="card-text text-muted">Rata-rata keseluruhan</p>
+                    <h2 class="card-text">
+                        {{ $kesehatanPersen !== null ? number_format($kesehatanPersen, 2) . '%' : 'Data tidak tersedia' }}
+                    </h2>
+                    <p class="card-text text-muted">
+                        Rata-rata : {{ $ndviAverage !== null ? number_format($ndviAverage, 3) : 'N/A' }},
+                        Alert: {{ $alertCount }}
+                    </p>
                 </div>
             </div>
         </div>
