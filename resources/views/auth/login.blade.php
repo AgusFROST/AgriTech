@@ -37,7 +37,8 @@
                 <input type="checkbox" class="form-check-input" id="rememberMe" name="remember">
                 <label class="form-check-label" for="rememberMe">Ingat saya</label>
             </div>
-            <a href="#" class="text-muted">Lupa password?</a>
+            <a href="{{ route('password.request') }}" class="text-muted">Lupa password?</a>
+
         </div>
         <button type="submit" class="btn btn-dark w-100">Masuk</button>
     </form>

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
+use Illuminate\Support\Facades\Password;
 
 
 /*
@@ -23,10 +24,16 @@ use App\Http\Controllers\DashboardController;
 
 
 Route::middleware(['guest'])->group(function () {
-Route::get('/', [AuthController::class, 'showLogin']);
-Route::post('/', [AuthController::class, 'login'])->name('login');
-Route::get('/register', [AuthController::class, 'showRegister']);
-Route::post('/register', [AuthController::class, 'register']);
+    Route::get('/', [AuthController::class, 'showLogin']);
+    Route::post('/', [AuthController::class, 'login'])->name('login');
+    Route::get('/register', [AuthController::class, 'showRegister']);
+    Route::post('/register', [AuthController::class, 'register']);
+
+    // Reset password routes
+    Route::get('forgot-password', [AuthController::class, 'showForgotPassword'])->name('password.request');
+    Route::post('forgot-password', [AuthController::class, 'sendResetLink'])->middleware('throttle:5,1')->name('password.email');
+    Route::get('reset-password/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
+    Route::post('reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
 });
 
 Route::middleware(['auth'])->group(function () {
